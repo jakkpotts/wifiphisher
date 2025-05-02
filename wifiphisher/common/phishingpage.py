@@ -12,7 +12,8 @@ import wifiphisher.common.constants as constants
 try:
     from configparser import ConfigParser, RawConfigParser
 except ImportError:
-    from configparser import ConfigParser, RawConfigParser
+    # For Python 2 compatibility
+    from ConfigParser import ConfigParser, RawConfigParser
 
 
 

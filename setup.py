@@ -31,6 +31,9 @@ try:
 except NameError:
     pass  # Python 3
 
+# Create tmp directory
+if not os.path.exists('tmp'):
+    os.makedirs('tmp')
 
 class CleanCommand(Command):
     """Custom clean command to tidy up the project root."""
@@ -144,13 +147,13 @@ VERSION = "1.4"
 CLASSIFIERS = ["Development Status :: 5 - Production/Stable",
                "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
                "Natural Language :: English", "Operating System :: Unix",
-               "Programming Language :: Python :: 2", "Programming Language :: Python :: 2.7",
-               "Programming Language :: Python :: 2 :: Only", "Topic :: Security",
+               "Programming Language :: Python :: 3", 
+               "Topic :: Security",
                "Topic :: System :: Networking", "Intended Audience :: End Users/Desktop",
                "Intended Audience :: System Administrators",
                "Intended Audience :: Information Technology"]
 ENTRY_POINTS = {"console_scripts": ["wifiphisher = wifiphisher.pywifiphisher:run"]}
-INSTALL_REQUIRES = ["pbkdf2", "scapy", "tornado>=5.0.0", "roguehostapd", "pyric"]
+INSTALL_REQUIRES = ["pbkdf2", "scapy", "tornado>=5.0.0", "roguehostapd", "pyric", "six", "configparser"]
 DEPENDENCY_LINKS = \
 ["http://github.com/wifiphisher/roguehostapd/tarball/master#egg=roguehostapd-1.9.0", \
 "http://github.com/sophron/pyric/tarball/master#egg=pyric-0.5.0"]
@@ -163,7 +166,10 @@ check_required_library("netlink", ["nl-3", "nl-genl-3"],
                        [LIB_NL3_PATH])
 check_required_library("openssl", ["ssl"],
                        [LIB_SSL_PATH])
-shutil.rmtree('tmp')
+
+# Clean up the tmp directory safely
+if os.path.exists('tmp'):
+    shutil.rmtree('tmp')
 
 # run setup
 setup(name=NAME, author=AUTHOR, author_email=AUTHOR_EMAIL, description=DESCRIPTION,
