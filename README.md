@@ -44,7 +44,7 @@ unknowingly, or in other words, obtaining a man-in-the-middle (MITM) position. W
     * KARMA, where Wifiphisher masquerades as a public network searched for by nearby Wi-Fi clients.
     * Known Beacons, where Wifiphisher broadcasts a dictionary of common ESSIDs, that the around wireless stations have likely connected to in the past.
 
-    At the same time, Wifiphisher keeps forging “Deauthenticate” or “Disassociate” packets to disrupt existing associations and eventually lure victims using the above techniques.
+    At the same time, Wifiphisher keeps forging "Deauthenticate" or "Disassociate" packets to disrupt existing associations and eventually lure victims using the above techniques.
 
 <p align="center"><img width="70%" src="https://wifiphisher.github.io/wifiphisher/diagram.jpg" /><br /><i>Performing MiTM attack</i></p>
 
@@ -65,10 +65,41 @@ Following are the requirements for getting the most out of Wifiphisher:
 
   - A working Linux system. People have made Wifiphisher work on many distros, but Kali Linux is the officially supported distribution, thus all new features are primarily tested on this platform.
   - One wireless network adapter that supports AP & Monitor mode and is capable of injection. Drivers should support netlink.
+  - System dependencies:
+    - libnl-3-dev
+    - libnl-genl-3-dev
+    - libssl-dev
+    - dnsmasq
+    - python3-dev
+    - build-essential
+    - pkg-config
 
 ## Installation
 
-To install the latest development version type the following commands:
+### Updated Installation Method (Python 3.13+ Compatible)
+
+The traditional `setup.py` method has been replaced with an improved installation script that handles Python 3.13+ compatibility issues and the SafeConfigParser deprecation. Use this method to install the latest version with all patches:
+
+```bash
+# Clone the repository
+git clone https://github.com/wifiphisher/wifiphisher.git
+cd wifiphisher
+
+# Make the installation script executable
+chmod +x install_wifiphisher.sh
+
+# Run the installation script as root
+sudo ./install_wifiphisher.sh
+```
+
+The installation script will:
+1. Install all required system dependencies
+2. Install a patched version of roguehostapd compatible with Python 3.13+
+3. Install Wifiphisher with all dependencies
+
+### Legacy Installation Method
+
+To install using the traditional method (not recommended for Python 3.13+):
 
 ```bash
 git clone https://github.com/wifiphisher/wifiphisher.git # Download the latest revision
@@ -76,7 +107,39 @@ cd wifiphisher # Switch to tool's directory
 sudo python setup.py install # Install any dependencies
 ```
 
-Alternatively, you can download the latest stable version from the <a href="https://github.com/wifiphisher/wifiphisher/releases">Releases page</a>.
+### Manual Installation
+
+If you prefer to install manually:
+
+1. Install the system dependencies:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y libnl-3-dev libnl-genl-3-dev libssl-dev dnsmasq python3-dev build-essential pkg-config
+```
+
+2. Install the patched roguehostapd:
+
+```bash
+cd roguehostapd
+pip install -e .
+cd ..
+```
+
+3. Install Wifiphisher:
+
+```bash
+pip install -e .
+```
+
+## Troubleshooting
+
+If you encounter issues during installation:
+
+1. Make sure all system dependencies are installed correctly
+2. Check that you're running the commands with appropriate permissions (sudo)
+3. Verify that Python 3 is being used (not Python 2)
+4. If you encounter "SafeConfigParser" errors on Python 3.13+, use the updated installation method
 
 ## Usage
 
@@ -178,6 +241,8 @@ Wifiphisher is licensed under the GPLv3 license. See [LICENSE](LICENSE) for more
 
 ## Project Status
 Wifiphisher's current version is **1.4**. You can download the latest release from <a href="https://github.com/wifiphisher/wifiphisher/releases/tag/v1.4">here</a>. Otherwise you can get the latest development version by cloning this repository.
+
+**Important Update**: The project has been patched to work with Python 3.13+ by fixing the deprecated SafeConfigParser issue in the roguehostapd dependency. We've replaced the traditional `setup.py` installation method with a more robust `install_wifiphisher.sh` script that handles all dependencies properly.
 
 ## Disclaimer
 * Usage of Wifiphisher for attacking infrastructures without prior mutual consistency can be considered as an illegal activity. It is the final user's responsibility to obey all applicable local, state and federal laws. Authors assume no liability and are not responsible for any misuse or damage caused by this program.

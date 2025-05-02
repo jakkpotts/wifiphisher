@@ -1,7 +1,22 @@
+# Python package dependencies
 pbkdf2
 scapy
 tornado>=5.0.0
-roguehostapd @ git+https://github.com/wifiphisher/roguehostapd.git@master
 pyric @ git+https://github.com/sophron/pyric.git@master
 six
-configparser 
+configparser
+
+# Local patched roguehostapd
+./roguehostapd
+
+# System dependencies (to be installed via apt):
+# - libnl-3-dev
+# - libnl-genl-3-dev
+# - libssl-dev
+# - dnsmasq
+# - python3-dev
+# - build-essential
+# - pkg-config
+#
+# These can be installed with: 
+# apt-get update && apt-get install -y libnl-3-dev libnl-genl-3-dev libssl-dev dnsmasq python3-dev build-essential pkg-config 
