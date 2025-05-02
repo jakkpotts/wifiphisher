@@ -76,9 +76,9 @@ Following are the requirements for getting the most out of Wifiphisher:
 
 ## Installation
 
-### Updated Installation Method (Python 3.13+ Compatible)
+### Current Installation Method
 
-The traditional `setup.py` method has been replaced with an improved installation script that handles Python 3.13+ compatibility issues and the SafeConfigParser deprecation. Use this method to install the latest version with all patches:
+This project now uses a dedicated installation script that handles all dependencies properly, including Python 3.13+ compatibility fixes:
 
 ```bash
 # Clone the repository
@@ -97,15 +97,7 @@ The installation script will:
 2. Install a patched version of roguehostapd compatible with Python 3.13+
 3. Install Wifiphisher with all dependencies
 
-### Legacy Installation Method
-
-To install using the traditional method (not recommended for Python 3.13+):
-
-```bash
-git clone https://github.com/wifiphisher/wifiphisher.git # Download the latest revision
-cd wifiphisher # Switch to tool's directory
-sudo python setup.py install # Install any dependencies
-```
+> **Note**: The traditional `setup.py` has been completely removed as it was causing compatibility issues with newer Python versions. The `install_wifiphisher.sh` script is now the official installation method.
 
 ### Manual Installation
 
@@ -129,6 +121,7 @@ cd ..
 3. Install Wifiphisher:
 
 ```bash
+# From the wifiphisher directory
 pip install -e .
 ```
 
@@ -139,7 +132,7 @@ If you encounter issues during installation:
 1. Make sure all system dependencies are installed correctly
 2. Check that you're running the commands with appropriate permissions (sudo)
 3. Verify that Python 3 is being used (not Python 2)
-4. If you encounter "SafeConfigParser" errors on Python 3.13+, use the updated installation method
+4. If you encounter "SafeConfigParser" errors on Python 3.13+, use the updated installation script
 
 ## Usage
 
@@ -242,7 +235,7 @@ Wifiphisher is licensed under the GPLv3 license. See [LICENSE](LICENSE) for more
 ## Project Status
 Wifiphisher's current version is **1.4**. You can download the latest release from <a href="https://github.com/wifiphisher/wifiphisher/releases/tag/v1.4">here</a>. Otherwise you can get the latest development version by cloning this repository.
 
-**Important Update**: The project has been patched to work with Python 3.13+ by fixing the deprecated SafeConfigParser issue in the roguehostapd dependency. We've replaced the traditional `setup.py` installation method with a more robust `install_wifiphisher.sh` script that handles all dependencies properly.
+**Important Update**: The project has been patched to work with Python 3.13+ by fixing the deprecated SafeConfigParser issue in the roguehostapd dependency. We've completely removed the traditional `setup.py` installation method and replaced it with a more robust `install_wifiphisher.sh` script that handles all dependencies properly.
 
 ## Disclaimer
 * Usage of Wifiphisher for attacking infrastructures without prior mutual consistency can be considered as an illegal activity. It is the final user's responsibility to obey all applicable local, state and federal laws. Authors assume no liability and are not responsible for any misuse or damage caused by this program.
