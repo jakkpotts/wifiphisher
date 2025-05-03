@@ -1,32 +1,41 @@
 #!/bin/bash
 
-# Check if running as root
-if [ "$EUID" -ne 0 ]; then
-  echo "Please run as root (sudo)"
+# Run from outside sudo and ensure venv is active
+if [ "$EUID" -eq 0 ]; then
+  echo "Do not run this script with sudo. It uses a virtualenv."
   exit 1
 fi
 
-# Install system dependencies
-echo "Installing system dependencies..."
-apt-get update
-apt-get install -y \
+# Confirm venv is active
+if [[ -z "$VIRTUAL_ENV" ]]; then
+  echo "Please activate your Python virtual environment before running this script."
+  exit 1
+fi
+
+echo "[*] Installing system dependencies (requires sudo password)..."
+sudo apt-get update
+sudo apt-get install -y \
   libnl-3-dev \
   libnl-genl-3-dev \
   libssl-dev \
   dnsmasq \
-  python3-dev \
+  hostapd \
+  aircrack-ng \
+  iw \
+  rfkill \
+  python3.13-dev \
   build-essential \
-  pkg-config
+  pkg-config \
+  git
 
-# Install the patched roguehostapd
-echo "Installing patched roguehostapd..."
-cd roguehostapd
+# Install roguehostapd from local directory (in-tree)
+echo "[*] Installing roguehostapd into venv..."
+cd roguehostapd || exit 1
 pip install -e .
 cd ..
 
-# Install wifiphisher
-echo "Installing wifiphisher..."
+# Install wifiphisher from local editable source
+echo "[*] Installing wifiphisher into venv..."
 pip install -e .
 
-echo "Installation completed!"
-echo "You can now run wifiphisher with: wifiphisher" 
+echo "[+] Done. Run Wifiphisher with: sudo $VIRTUAL_ENV/bin/wifiphisher"
