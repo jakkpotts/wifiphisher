@@ -12,6 +12,8 @@ if [[ -z "$VIRTUAL_ENV" ]]; then
   exit 1
 fi
 
+INSTALL_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 echo "[*] Installing system dependencies (requires sudo password)..."
 sudo apt-get update
 sudo apt-get install -y \
@@ -39,3 +41,9 @@ echo "[*] Installing wifiphisher into venv..."
 pip install -e .
 
 echo "[+] Done. Run Wifiphisher with: sudo $VIRTUAL_ENV/bin/wifiphisher"
+
+echo "[+] Creating global symlink to Wifiphisher..."
+
+sudo ln -sf "$INSTALL_DIR/.venv/bin/wifiphisher" /usr/local/bin/wifiphisher
+
+echo "[+] You can now run it with: sudo wifiphisher"
