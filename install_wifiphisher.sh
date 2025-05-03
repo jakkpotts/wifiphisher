@@ -47,3 +47,7 @@ echo "[+] Creating global symlink to Wifiphisher..."
 sudo ln -sf "$INSTALL_DIR/.venv/bin/wifiphisher" /usr/local/bin/wifiphisher
 
 echo "[+] You can now run it with: sudo wifiphisher"
+
+echo "Patching pyric..."
+sed -i 's/fout.write(rfke)/fout.write(rfke.decode())/' \
+  "$VIRTUAL_ENV/lib/python*/site-packages/pyric/utils/rfkill.py"
