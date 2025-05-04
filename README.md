@@ -152,7 +152,7 @@ Useful against victims in public areas. The <a href="https://wifiphisher.org/ps/
 wifiphisher --phishingscenario captive-portal
 ```
 
-Use the `captive-portal` scenario to intercept Android and iOS connectivity-check probes, spoof the DNS entries for known captive-portal domains, and return an HTTP 302 redirect to `/portal`.
+Use the `--captive-portal` flag to intercept Android and iOS connectivity-check probes, spoof the DNS entries for known captive-portal domains, and return an HTTP 302 redirect to `/portal`.
 
 ***
 
@@ -169,7 +169,7 @@ Following are all the options along with their descriptions (also available with
 |-nE| --noextensions|	Do not load any extensions.|
 |-e ESSID| --essid ESSID|	Enter the ESSID of the rogue Access Point. This option will skip Access Point selection phase. Example: --essid 'Free WiFi'|
 |-pPD PHISHING_PAGES_DIRECTORY|--phishing-pages-directory PHISHING_PAGES_DIRECTORY| Search for phishing pages in this location|
-|-p PHISHINGSCENARIO| --phishingscenario PHISHINGSCENARIO	|Choose the phishing scenario to run. This option will skip the scenario selection phase. You can now use `captive-portal` to trigger mobile captive-portal checks against Android/iOS. Example: -p firmware_upgrade or -p captive-portal|
+|-p PHISHINGSCENARIO | --phishingscenario PHISHINGSCENARIO | Choose the phishing template context to run. This option will skip the scenario selection phase. Example: -p firmware_upgrade |
 |-pK PRESHAREDKEY| --presharedkey PRESHAREDKEY|	Add WPA/WPA2 protection on the rogue Access Point. Example: -pK s3cr3tp4ssw0rd|
 |-qS| --quitonsuccess|	Stop the script after successfully retrieving one pair of credentials.|
 |-lC| --lure10-capture| Capture the BSSIDs of the APs that are discovered during AP selection phase. This option is part of Lure10 attack.|
@@ -192,6 +192,7 @@ Following are all the options along with their descriptions (also available with
 ||--dnsmasq-conf DNSMASQ_CONF|Determine the full path of dnmasq.conf file.|
 |-dK|--disable-karma|Disables KARMA attack.|
 |-pE|--phishing-essid|Determine the ESSID you want to use for the phishing page.|
+|| --captive-portal | Intercept Android/iOS connectivity-check probes and redirect them to the captive portal page. |
 
 
 ## Screenshots

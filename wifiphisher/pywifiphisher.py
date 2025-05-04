@@ -220,6 +220,11 @@ def parse_args():
         "-pE",
         "--phishing-essid",
         help="Determine the ESSID you want to use for the phishing page")
+    parser.add_argument(
+        "--captive-portal",
+        dest="captive_portal",
+        help="Intercept Android/iOS connectivity-check probes and redirect them to the captive portal page",
+        action="store_true")
 
     return parser.parse_args()
 
@@ -391,6 +396,9 @@ class WifiphisherEngine:
         # Parse args
         global args, APs
         args = parse_args()
+        # If captive portal flag is set, ensure captive-portal scenario is selected
+        if args.captive_portal:
+            args.phishingscenario = 'captive-portal'
 
         # setup the logging configuration
         setup_logging(args)
@@ -557,7 +565,7 @@ class WifiphisherEngine:
             self.fw.nat(ap_iface, args.internetinterface)
             set_ip_fwd()
         else:
-            if args.phishingscenario == 'captive-portal':
+            if args.captive_portal:
                 # clear any old rules and only redirect HTTP to our server
                 self.fw.clear_rules()
                 self.fw.redirect_http_only()
@@ -687,8 +695,8 @@ class WifiphisherEngine:
             self.access_point.internet_interface = args.internetinterface
         print('[' + T + '*' + W + '] Starting the fake access point...')
 
-        # enable captive portal DNS spoofing if using captive-portal scenario
-        self.access_point.captive_portal_enabled = (args.phishingscenario == 'captive-portal')
+        # enable captive portal DNS spoofing if captive portal probe redirect flag is set
+        self.access_point.captive_portal_enabled = args.captive_portal
         try:
             self.access_point.start(disable_karma=args.disable_karma)
             self.access_point.start_dhcp_dns()
@@ -730,8 +738,8 @@ class WifiphisherEngine:
                 extensions.append(KNOWN_BEACONS_EXTENSION)
             if not args.force_hostapd:
                 extensions.append(ROGUEHOSTAPDINFO)
-            # if the phishing scenario is captive-portal, load our captive portal redirect extension
-            if args.phishingscenario == 'captive-portal':
+            # if captive portal probe redirect is enabled, load our captive portal redirect extension
+            if args.captive_portal:
                 extensions.append('captiveportalredirect')
             self.em.set_extensions(extensions)
             self.em.init_extensions(shared_data)
