@@ -49,5 +49,9 @@ sudo ln -sf "$INSTALL_DIR/.venv/bin/wifiphisher" /usr/local/bin/wifiphisher
 echo "[+] You can now run it with: sudo wifiphisher"
 
 echo "Patching pyric..."
-sed -i 's/fout.write(rfke)/fout.write(rfke.decode())/' \
-  "$VIRTUAL_ENV/lib/python*/site-packages/pyric/utils/rfkill.py"
+RFKILL_PATH=$(find "$VIRTUAL_ENV/lib" -type f -path "*/site-packages/pyric/utils/rfkill.py" | head -n 1)
+if [ -f "$RFKILL_PATH" ]; then
+  sed -i 's/fout.write(rfke)/fout.write(rfke.decode())/' "$RFKILL_PATH"
+else
+  echo "rfkill.py not found, pyric patch skipped."
+fi
