@@ -61,6 +61,13 @@ class AccessPoint(object):
                 dhcpconf.write("address=/google.com/172.217.5.78\n")
                 dhcpconf.write("address=/clients3.google.com/172.217.11.174\n")
                 dhcpconf.write("address=/#/%s " % (constants.NETWORK_GW_IP, ))
+                # If captive portal mode, spoof Android and iOS connectivity domains
+                if getattr(self, 'captive_portal_enabled', False):
+                    dhcpconf.write("address=/connectivitycheck.gstatic.com/{0}\n".format(constants.NETWORK_GW_IP))
+                    dhcpconf.write("address=/clients3.google.com/{0}\n".format(constants.NETWORK_GW_IP))
+                    dhcpconf.write("address=/clients1.google.com/{0}\n".format(constants.NETWORK_GW_IP))
+                    dhcpconf.write("address=/captive.apple.com/{0}\n".format(constants.NETWORK_GW_IP))
+                    dhcpconf.write("address=/www.apple.com/{0}\n".format(constants.NETWORK_GW_IP))
         # catch the exception if dnsmasq is not installed
         try:
             subprocess.Popen(

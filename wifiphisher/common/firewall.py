@@ -51,6 +51,15 @@ class Fw():
             "--to-destination {}:{}".format(NETWORK_GW_IP, SSL_PORT)
         ])
 
+    @staticmethod
+    def redirect_http_only():
+        # type: () -> None
+        """Redirect only HTTP (port 80) requests to the local server"""
+        execute_commands([
+            "iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT "
+            "--to-destination {}:{}".format(NETWORK_GW_IP, PORT)
+        ])
+
     def on_exit(self):
         # type: () -> None
         """Start the clean up."""

@@ -88,6 +88,39 @@ class CaptivePortalHandler(tornado.web.RequestHandler):
         :rtype: None
         """
 
+        # Check if this is a captive portal probe and redirect to /portal
+        host = self.request.host.split(':', 1)[0]
+        if self.application.settings.get('captive_portal_enabled', False) and host in (
+                'connectivitycheck.gstatic.com',
+                'clients3.google.com',
+                'clients1.google.com',
+                'captive.apple.com',
+                'www.apple.com'):
+            # Issue HTTP 302 redirect to /portal
+            self.set_status(302)
+            self.set_header('Location', '/portal')
+            # Bypass any caching
+            self.set_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            self.set_header('Pragma', 'no-cache')
+            self.set_header('Expires', '0')
+            # Log MAC, IP, Host, and User-Agent
+            ua = self.request.headers.get('User-Agent', '')
+            victims_instance = victim.Victims.get_instance()
+            mac = None
+            for m, vobj in victims_instance.victims_dic.items():
+                if vobj.ip_address == self.request.remote_ip:
+                    mac = m
+                    break
+            logger.info('Captive redirect: MAC=%s IP=%s Host=%s UA=%s', mac, self.request.remote_ip, host, ua)
+            try:
+                with open('/tmp/captive-redirect.log', 'a+') as flog:
+                    flog.write('%s MAC=%s IP=%s Host=%s UA=%s\n' % (
+                        time.strftime('%Y-%m-%d %H:%M:%S'), mac,
+                        self.request.remote_ip, host, ua))
+            except Exception:
+                pass
+            return
+
         requested_file = self.request.path[1:]
         template_directory = template.get_path()
 
@@ -190,27 +223,36 @@ def runHTTPServer(ip, port, ssl_port, t, em):
     for f in em.get_ui_funcs():
         setattr(uimethods, f.__name__, f)
 
+    # Determine if captive portal redirect extension is active
+    enabled = False
+    try:
+        enabled = (hasattr(em, '_shared_data') and
+                   getattr(em._shared_data.args, 'phishingscenario', None) == 'captive-portal')
+    except Exception:
+        enabled = False
     app = tornado.web.Application(
         [
-            (r"/backend/.*", BackendHandler, {
-                "em": em
-            }),
+            (r"/backend/.*", BackendHandler, {"em": em}),
             (r"/.*", CaptivePortalHandler),
         ],
         template_path=template.get_path(),
         static_path=template.get_path_static(),
         compiled_template_cache=False,
-        ui_methods=uimethods)
+        ui_methods=uimethods,
+        captive_portal_enabled=enabled
+    )
     app.listen(port, address=ip)
 
-    ssl_app = tornado.web.Application([(r"/.*", DowngradeToHTTP)], port=port)
-
-    https_server = tornado.httpserver.HTTPServer(
-        ssl_app,
-        ssl_options={
-            "certfile": constants.PEM,
-            "keyfile": constants.PEM,
-        })
-    https_server.listen(ssl_port, address=ip)
+    # Only set up HTTPS downgrade when not in captive-portal mode
+    if not enabled:
+        ssl_app = tornado.web.Application([(r"/.*", DowngradeToHTTP)], port=port)
+        https_server = tornado.httpserver.HTTPServer(
+            ssl_app,
+            ssl_options={
+                'certfile': constants.PEM,
+                'keyfile': constants.PEM,
+            }
+        )
+        https_server.listen(ssl_port, address=ip)
 
     tornado.ioloop.IOLoop.instance().start()

@@ -170,6 +170,15 @@ Simply spawn an open Wi-Fi network with ESSID "FREE WI-FI" and perform the "OAut
 
 Useful against victims in public areas. The <a href="https://wifiphisher.org/ps/oauth-login/">"OAuth Login"</a> scenario provides a simple way for capturing credentials from social networks, like Facebook. 
 
+***
+
+```shell
+wifiphisher --phishingscenario captive-portal
+```
+
+Use the `captive-portal` scenario to intercept Android and iOS connectivity-check probes, spoof the DNS entries for known captive-portal domains, and return an HTTP 302 redirect to `/portal`.
+
+***
 
 Following are all the options along with their descriptions (also available with `wifiphisher -h`):
 
@@ -184,7 +193,7 @@ Following are all the options along with their descriptions (also available with
 |-nE| --noextensions|	Do not load any extensions.|
 |-e ESSID| --essid ESSID|	Enter the ESSID of the rogue Access Point. This option will skip Access Point selection phase. Example: --essid 'Free WiFi'|
 |-pPD PHISHING_PAGES_DIRECTORY|--phishing-pages-directory PHISHING_PAGES_DIRECTORY| Search for phishing pages in this location|
-|-p PHISHINGSCENARIO| --phishingscenario PHISHINGSCENARIO	|Choose the phishing scenario to run.This option will skip the scenario selection phase. Example: -p firmware_upgrade|
+|-p PHISHINGSCENARIO| --phishingscenario PHISHINGSCENARIO	|Choose the phishing scenario to run. This option will skip the scenario selection phase. You can now use `captive-portal` to trigger mobile captive-portal checks against Android/iOS. Example: -p firmware_upgrade or -p captive-portal|
 |-pK PRESHAREDKEY| --presharedkey PRESHAREDKEY|	Add WPA/WPA2 protection on the rogue Access Point. Example: -pK s3cr3tp4ssw0rd|
 |-qS| --quitonsuccess|	Stop the script after successfully retrieving one pair of credentials.|
 |-lC| --lure10-capture| Capture the BSSIDs of the APs that are discovered during AP selection phase. This option is part of Lure10 attack.
