@@ -226,7 +226,12 @@ def parse_args():
         help="Intercept Android/iOS connectivity-check probes and redirect them to the captive portal page",
         action="store_true")
 
-    return parser.parse_args()
+    # Parse and validate arguments
+    args = parser.parse_args()
+    # Disallow using 'captive-portal' as a phishing scenario name
+    if args.phishingscenario == 'captive-portal':
+        parser.error("'captive-portal' is not a phishing scenario; please use the --captive-portal flag instead.")
+    return args
 
 
 VERSION = "1.4GIT"
@@ -396,9 +401,11 @@ class WifiphisherEngine:
         # Parse args
         global args, APs
         args = parse_args()
-        # If captive portal flag is set, ensure captive-portal scenario is selected
-        if args.captive_portal:
-            args.phishingscenario = 'captive-portal'
+        # If user passed -p captive-portal, treat it as --captive-portal
+        if args.phishingscenario == 'captive-portal':
+            args.captive_portal = True
+            # clear phishingscenario so interactive UI prompts for template
+            args.phishingscenario = None
 
         # setup the logging configuration
         setup_logging(args)
