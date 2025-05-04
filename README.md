@@ -97,7 +97,7 @@ The installation script will:
 2. Install a patched version of roguehostapd compatible with Python 3.13+
 3. Install Wifiphisher with all dependencies
 
-> **Note**: The traditional `setup.py` has been completely removed as it was causing compatibility issues with newer Python versions. The `install_wifiphisher.sh` script is now the official installation method.
+> **Note**: The traditional `setup.py` is no longer used, as it was causing compatibility issues with newer Python versions. Despite it still remaining in the repository, the new `install_wifiphisher.sh` script is now the official installation method. 
 
 ### Manual Installation
 
@@ -244,7 +244,7 @@ Wifiphisher is licensed under the GPLv3 license. See [LICENSE](LICENSE) for more
 ## Project Status
 Wifiphisher's current version is **1.4**. You can download the latest release from <a href="https://github.com/wifiphisher/wifiphisher/releases/tag/v1.4">here</a>. Otherwise you can get the latest development version by cloning this repository.
 
-**Important Update**: The project has been patched to work with Python 3.13+ by fixing the deprecated SafeConfigParser issue in the roguehostapd dependency. We've completely removed the traditional `setup.py` installation method and replaced it with a more robust `install_wifiphisher.sh` script that handles all dependencies properly.
+**Important Update**: The project has been patched to work with Python 3.13+ by fixing the deprecated SafeConfigParser issue in the roguehostapd dependency. We've completely removed the traditional `setup.py` installation method and replaced it with a more robust `install_wifiphisher.sh` script that handles all dependencies properly. However, `setup.py` has not been deleted and remains in the repository. 
 
 ## Disclaimer
 * Usage of Wifiphisher for attacking infrastructures without prior mutual consistency can be considered as an illegal activity. It is the final user's responsibility to obey all applicable local, state and federal laws. Authors assume no liability and are not responsible for any misuse or damage caused by this program.
