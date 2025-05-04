@@ -99,31 +99,7 @@ The installation script will:
 
 > **Note**: The traditional `setup.py` is no longer used, as it was causing compatibility issues with newer Python versions. Despite it still remaining in the repository, the new `install_wifiphisher.sh` script is now the official installation method. 
 
-### Manual Installation
-
-If you prefer to install manually:
-
-1. Install the system dependencies:
-
-```bash
-sudo apt-get update
-sudo apt-get install -y libnl-3-dev libnl-genl-3-dev libssl-dev dnsmasq python3-dev build-essential pkg-config
-```
-
-2. Install the patched roguehostapd:
-
-```bash
-cd roguehostapd
-pip install -e .
-cd ..
-```
-
-3. Install Wifiphisher:
-
-```bash
-# From the wifiphisher directory
-pip install -e .
-```
+> **Important**: Ensure your Python virtual environment is activated before running the installation script and any subsequent commands.
 
 ## Troubleshooting
 
@@ -196,7 +172,7 @@ Following are all the options along with their descriptions (also available with
 |-p PHISHINGSCENARIO| --phishingscenario PHISHINGSCENARIO	|Choose the phishing scenario to run. This option will skip the scenario selection phase. You can now use `captive-portal` to trigger mobile captive-portal checks against Android/iOS. Example: -p firmware_upgrade or -p captive-portal|
 |-pK PRESHAREDKEY| --presharedkey PRESHAREDKEY|	Add WPA/WPA2 protection on the rogue Access Point. Example: -pK s3cr3tp4ssw0rd|
 |-qS| --quitonsuccess|	Stop the script after successfully retrieving one pair of credentials.|
-|-lC| --lure10-capture| Capture the BSSIDs of the APs that are discovered during AP selection phase. This option is part of Lure10 attack.
+|-lC| --lure10-capture| Capture the BSSIDs of the APs that are discovered during AP selection phase. This option is part of Lure10 attack.|
 |-lE LURE10_EXPLOIT |--lure10-exploit LURE10_EXPLOIT| Fool the Windows Location Service of nearby Windows users to believe it is within an area that was previously captured with --lure10-capture. Part of the Lure10 attack.|
 |-iAM| --mac-ap-interface| Specify the MAC address of the AP interface. Example: -iAM 38:EC:11:00:00:00|
 |-iEM| --mac-extensions-interface| Specify the MAC address of the extensions interface. Example: -iEM E8:2A:EA:00:00:00|
